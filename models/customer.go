@@ -11,13 +11,11 @@ func newCustomerCollection() *db.Collection {
 	return db.NewCollectionSession("customers")
 }
 
-type Customer structs.Customer
-
 // GetCustomers : Get list all data customers
-func GetCustomers() ([]Customer, error) {
+func GetCustomers() ([]structs.Customer, error) {
 	var (
 	   err error
-	   customers []Customer
+	   customers []structs.Customer
     )
     // Get customer collection connection 
 	c := newCustomerCollection()
@@ -31,7 +29,7 @@ func GetCustomers() ([]Customer, error) {
 }
 
 // CreateCustomer : Create customer
-func CreateCustomer(customer Customer) (Customer, error) {
+func CreateCustomer(customer structs.Customer) (structs.Customer, error) {
 	var (
 	   err error
 	)
@@ -51,10 +49,10 @@ func CreateCustomer(customer Customer) (Customer, error) {
 }
 
 // FindCustomer : Find customer by id
-func FindCustomer(id bson.ObjectId) (Customer, error) {
+func FindCustomer(id bson.ObjectId) (structs.Customer, error) {
 	var (
 	   err error
-	   customer Customer
+	   customer structs.Customer
    )
    // Get customer collection connection 
 	c := newCustomerCollection()

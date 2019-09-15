@@ -3,12 +3,10 @@ package controllers
 import (
 	"digital_saving/models"
 	"digital_saving/structs"
-	// "encoding/json"
+	"encoding/json"
 
 	"github.com/astaxie/beego"
 )
-
-type Customer structs.Customer
 
 // Operations about customer
 type CustomerController struct {
@@ -32,11 +30,10 @@ func (c *CustomerController) GetAll() {
 // @Success 200 {Customer} structs.Customer
 // @Failure 403 body is empty
 // @router / [post]
-// func (c *CustomerController) Post() {
-// 	var cus Customer
-// 	json.Unmarshal(c.Ctx.Input.RequestBody, &cus)
-// 	customer, _ := models.CreateCustomer(cus)
-
-// 	c.Data["json"] = customer
-// 	c.ServeJSON()
-// }
+func (c *CustomerController) Post() {
+	var cus structs.Customer
+	json.Unmarshal(c.Ctx.Input.RequestBody, &cus)
+	customer, _  := models.CreateCustomer(cus)
+	c.Data["json"] = customer
+	c.ServeJSON()
+}
