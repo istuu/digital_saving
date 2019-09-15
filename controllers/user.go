@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"digi/models"
+	"digital_saving/models"
 	"encoding/json"
 
 	"github.com/astaxie/beego"

@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"digi/controllers"
+	"digital_saving/controllers"
 
 	"github.com/astaxie/beego"
 )
@@ -23,6 +23,11 @@ func init() {
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},
+			),
+		),
+		beego.NSNamespace("/customer",
+			beego.NSInclude(
+				&controllers.CustomerController{},
 			),
 		),
 	)

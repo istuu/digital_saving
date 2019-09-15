@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "digi/routers"
+	_ "digital_saving/routers"
 
 	"github.com/astaxie/beego"
 )
