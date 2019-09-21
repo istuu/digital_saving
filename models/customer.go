@@ -5,6 +5,7 @@ import (
 	"digital_saving/structs"
 	"gopkg.in/mgo.v2/bson"
 	"time"
+	"strconv"
 )
 
 func newCustomerCollection() *db.Collection {
@@ -48,19 +49,23 @@ func CreateCustomer(customer structs.Customer) (structs.Customer, error) {
 	 return customer, err
 }
 
-// FindCustomer : Find customer by id
-func FindCustomer(id bson.ObjectId) (structs.Customer, error) {
+// FindCustomer : Find customer by citizen_id
+func FindCustomer(citizen_id string) (structs.Customer, error) {
 	var (
 	   err error
 	   customer structs.Customer
-   )
-   // Get customer collection connection 
+	)
+	
+    // Get customer collection connection 
 	c := newCustomerCollection()
-	defer c.Close()
-   // get customer
-   err = c.Session.FindId(id).One(&customer)
-   if err != nil {
+ 	defer c.Close()
+
+	i, _ := strconv.Atoi(citizen_id)
+    // get customer
+    err = c.Session.Find(bson.M{"citizen_id": i}).One(&customer)
+    if err != nil {
 	   return customer,err
 	}
+
    return customer, err
 }

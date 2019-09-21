@@ -7,11 +7,11 @@ import (
 
 type Customer struct {
 	ID bson.ObjectId `json:"id" bson:"_id"`
-	CitizenId int `json:"citizen_id" bson:"citizen_id"`
-	FirstName string `json:"first_name" bson:"first_name"`
-	MidleName string `json:"midle_name" bson:"midle_name"`
-	LastName string `json:"last_name" bson:"last_name"`
-	Email string `json:"email" bson:"email"`
+	CitizenId int `json:"citizen_id" bson:"citizen_id" validate:"required"`
+	FirstName string `json:"first_name" bson:"first_name" validate:"required"`
+	MiddleName string `json:"middle_name" bson:"middle_name"`
+	LastName string `json:"last_name" bson:"last_name" validate:"required"`
+	Email string `json:"email" bson:"email" validate:"required,email"`
 	ProductCode string `json:"product_code" bson:"product_code"`
 	CreatedAt time.Time `json:"created_at,omitempty" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at,omitempty" bson:"updated_at"`

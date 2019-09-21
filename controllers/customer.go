@@ -3,6 +3,7 @@ package controllers
 import (
 	"digital_saving/models"
 	"digital_saving/structs"
+	"digital_saving/validations"
 	"encoding/json"
 
 	"github.com/astaxie/beego"
@@ -31,9 +32,55 @@ func (c *CustomerController) GetAll() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *CustomerController) Post() {
-	var cus structs.Customer
+	var (
+		cus structs.Customer
+		JSON structs.ReturnJson
+	)
+
 	json.Unmarshal(c.Ctx.Input.RequestBody, &cus)
-	customer, _  := models.CreateCustomer(cus)
-	c.Data["json"] = customer
+	err := validations.CustomerValidator(cus)
+	// returns nil or ValidationErrors ( []FieldError )
+	// err := validate.Struct(cus)
+	JSON.Success = false	
+	JSON.Data    = nil	
+
+	if err != nil {
+		JSON.Error   = err
+	}else{
+		customer, err  := models.CreateCustomer(cus)
+		if err != nil {
+			JSON.Message   = err.Error()
+		}else{
+			JSON.Success = true
+			JSON.Data    = &customer
+		}
+	}
+
+	c.Data["json"] = JSON
+	c.ServeJSON()
+}
+
+// @Title Get
+// @Description find object by citizenId
+// @Param	citizenId		path 	string	true		"the citizenId you want to get"
+// @Success 200 {object} models.Object
+// @Failure 403 :citizenId is empty
+// @router /:citizenId [get]
+func (c *CustomerController) Get() {
+	var JSON structs.ReturnJson
+
+	citizenId := c.Ctx.Input.Param(":citizenId")
+	JSON.Success = false	
+	JSON.Data    = nil	
+	if citizenId != "" {
+		customer, err := models.FindCustomer(citizenId)
+		if err != nil {
+			JSON.Message   = err.Error()
+		}else{
+			JSON.Success = true
+			JSON.Data    = &customer
+		}
+	}
+	c.Data["json"] = JSON
 	c.ServeJSON()
 }
