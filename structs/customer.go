@@ -17,3 +17,14 @@ type Customer struct {
 	CreatedAt time.Time `json:"created_at,omitempty" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at,omitempty" bson:"updated_at"`
 }
+
+type AccountInfo struct {
+	AccountNumber int
+	Name string
+	ProductName string
+	Interest string
+	AccountStatus string
+	Branch string
+	Currency string
+	OpeningDate string
+}

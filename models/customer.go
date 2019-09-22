@@ -7,6 +7,7 @@ import (
 	"time"
 	"strconv"
 	"math/rand"
+	"strings"
 )
 
 func newCustomerCollection() *db.Collection {
@@ -73,10 +74,11 @@ func FindCustomer(citizen_id string) (structs.Customer, error) {
    return customer, err
 }
 
-func FindAccount(AccountNumber string) (structs.Customer, error) {
+func FindAccount(AccountNumber string) (structs.AccountInfo, error) {
 	var (
 	   err error
 	   customer structs.Customer
+	   account structs.AccountInfo
 	)
 	
     // Get customer collection connection 
@@ -87,10 +89,21 @@ func FindAccount(AccountNumber string) (structs.Customer, error) {
     // get customer
     err = c.Session.Find(bson.M{"account_number": i}).One(&customer)
     if err != nil {
-	   return customer,err
+	   return account,err
 	}
 
-   return customer, err
+	FullName := []string{customer.FirstName, customer.MiddleName, customer.LastName} 
+
+	account.AccountNumber	= customer.AccountNumber 
+	account.Name  			= strings.Join(FullName, " ") 
+	account.ProductName		= "Digital Basics Savings"
+	account.Interest 		= "3.00%" 
+	account.AccountStatus	= "ACTIVE" 
+	account.Branch  		= "DIGITAL BRANCH"
+	account.Currency  		= "IDR" 
+	account.OpeningDate     = customer.CreatedAt.Format("2 January 2006")
+
+   return account, err
 }
 
 func RandomNumber() int {

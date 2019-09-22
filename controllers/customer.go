@@ -92,18 +92,18 @@ func (c *CustomerController) Get() {
 // @Failure 403 :accountNumber is empty
 // @router /account/:accountNumber [get]
 func (c *CustomerController) GetAccount() {
-	var JSON structs.ReturnJson
+	var JSON structs.AccountJson
 
 	accountNumber := c.Ctx.Input.Param(":accountNumber")
 	JSON.Success = false	
 	JSON.Data    = nil	
 	if accountNumber != "" {
-		customer, err := models.FindAccount(accountNumber)
+		account, err := models.FindAccount(accountNumber)
 		if err != nil {
 			JSON.Message   = err.Error()
 		}else{
 			JSON.Success = true
-			JSON.Data    = &customer
+			JSON.Data    = &account
 		}
 	}
 	c.Data["json"] = JSON
