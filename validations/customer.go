@@ -1,12 +1,14 @@
 package validations
 
 import (
+	"digital_saving/models"
 	"digital_saving/structs"
 	"github.com/go-playground/locales/en"
 	"gopkg.in/go-playground/validator.v9"
 	"github.com/go-playground/universal-translator"
 	en_translations "gopkg.in/go-playground/validator.v9/translations/en"
-
+	"strconv"
+	
 	"github.com/astaxie/beego"
 )
 
@@ -51,6 +53,14 @@ func CustomerValidator(Customer structs.Customer) []string{
 			ErrorString = append(ErrorString, e.Translate(trans))
 		}
 	}
+	i := strconv.Itoa(Customer.CitizenId)
+	cus, err := models.FindCustomer(i)
+
+	beego.Warning(cus)
+	if(err == nil){
+		ErrorString = append(ErrorString, "Citizen ID is already exist.")
+	}
+
 	return ErrorString
 
 }

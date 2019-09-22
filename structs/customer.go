@@ -8,6 +8,7 @@ import (
 type Customer struct {
 	ID bson.ObjectId `json:"id" bson:"_id"`
 	CitizenId int `json:"citizen_id" bson:"citizen_id" validate:"required"`
+	AccountNumber int `json:"account_number" bson:"account_number"`
 	FirstName string `json:"first_name" bson:"first_name" validate:"required"`
 	MiddleName string `json:"middle_name" bson:"middle_name"`
 	LastName string `json:"last_name" bson:"last_name" validate:"required"`

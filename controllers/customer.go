@@ -84,3 +84,28 @@ func (c *CustomerController) Get() {
 	c.Data["json"] = JSON
 	c.ServeJSON()
 }
+
+// @Title GetAccount
+// @Description find object by accountNumber
+// @Param	accountNumber		path 	string	true		"the accountNumber you want to get"
+// @Success 200 {object} models.Object
+// @Failure 403 :accountNumber is empty
+// @router /account/:accountNumber [get]
+func (c *CustomerController) GetAccount() {
+	var JSON structs.ReturnJson
+
+	accountNumber := c.Ctx.Input.Param(":accountNumber")
+	JSON.Success = false	
+	JSON.Data    = nil	
+	if accountNumber != "" {
+		customer, err := models.FindAccount(accountNumber)
+		if err != nil {
+			JSON.Message   = err.Error()
+		}else{
+			JSON.Success = true
+			JSON.Data    = &customer
+		}
+	}
+	c.Data["json"] = JSON
+	c.ServeJSON()
+}

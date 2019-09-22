@@ -6,6 +6,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"time"
 	"strconv"
+	"math/rand"
 )
 
 func newCustomerCollection() *db.Collection {
@@ -22,7 +23,7 @@ func GetCustomers() ([]structs.Customer, error) {
 	c := newCustomerCollection()
 	defer c.Close()
     // get posts
-    err = c.Session.Find(nil).Sort("-published_at").All(&customers)
+    err = c.Session.Find(nil).Sort("-first_name").All(&customers)
     if err != nil {
 	   return customers,err
 	}
@@ -39,8 +40,10 @@ func CreateCustomer(customer structs.Customer) (structs.Customer, error) {
 	defer c.Close()
 	
     // set default mongodb ID  and created date
-    customer.ID = bson.NewObjectId()
-    customer.CreatedAt = time.Now()
+    customer.ID          = bson.NewObjectId()
+	customer.CreatedAt   = time.Now()
+	customer.ProductCode = "IDBSA001"
+	customer.AccountNumber = RandomNumber()
 	// Insert post to mongodb
 	err = c.Session.Insert(&customer)
 	if err != nil {
@@ -68,4 +71,30 @@ func FindCustomer(citizen_id string) (structs.Customer, error) {
 	}
 
    return customer, err
+}
+
+func FindAccount(AccountNumber string) (structs.Customer, error) {
+	var (
+	   err error
+	   customer structs.Customer
+	)
+	
+    // Get customer collection connection 
+	c := newCustomerCollection()
+ 	defer c.Close()
+
+	i, _ := strconv.Atoi(AccountNumber)
+    // get customer
+    err = c.Session.Find(bson.M{"account_number": i}).One(&customer)
+    if err != nil {
+	   return customer,err
+	}
+
+   return customer, err
+}
+
+func RandomNumber() int {
+	low := 10000000000
+	hi  := 99999999999
+    return low + rand.Intn(hi-low)
 }
